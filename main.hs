@@ -2,7 +2,7 @@ type Document [String]
 
 exstractTypeSignature :: String -> String -> Maybe String
 exstractTypeSignature str ptn =
-    | take $ length ptn $ str == ptn = str
+    | take (length ptn) str == ptn = str
 
 -- if possible: let val = document
 document :: Document
