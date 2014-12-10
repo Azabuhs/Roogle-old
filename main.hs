@@ -1,26 +1,23 @@
-type Document [String]
+import System.Environment
 
-exstractTypeSignature :: String -> String -> Maybe String
-exstractTypeSignature str ptn =
-    | take (length ptn) str == ptn = str
+type Document = [String]
 
--- if possible: let val = document
-document :: Document
-document = -- global variable
+extractTypeSignature :: String -> String -> Maybe String
+extractTypeSignature str ptn =
+    if take (length ptn) str == ptn 
+    then Just str
+    else Nothing
 
-buildDocument :: [String] -> String -> Maybe [String]
-buildDocument doc str =
+extractTypeSignatures :: String -> [String] -> [Maybe String]
+extractTypeSignatures ptn = map $ extractTypeSignatureWithSpecifiedPattern ptn
 
-appendToDocument :: String -> Maybe [String]
-appendToDocument str = buildDocument document str
+extractTypeSignatureWithSpecifiedPattern :: String -> String -> Maybe String
+extractTypeSignatureWithSpecifiedPattern ptn str = extractTypeSignature str ptn
 
-data Types a =  Ret a | Args (Types a) (Types a)
+typeSignaturePattern1 :: String
+typeSignaturePattern1 = "typesig"
 
-search :: Types 
-search (Ret t) = -- return value
-search (Args t t') = -- still argument
-
-main = do
-    let codes = -- read file to get the code using typesig
-    let document = extractTypeSignature codes "typesig" >>= appendToDocument
-    putStrln document
+main = do args <- getArgs
+          codes <- readFile $ head args-- read file to get the code using typesig
+          doc <- extractTypeSignatures typeSignaturePattern1 codes
+          -- somehow show the doc accumulated
