@@ -21,6 +21,6 @@ search (Ret t) = -- return value
 search (Args t t') = -- still argument
 
 main = do
-    codes = -- read file to get the code using typesig
-    document = extractTypeSignature codes "typesig" >>= appendToDocument
+    let codes = -- read file to get the code using typesig
+    let document = extractTypeSignature codes "typesig" >>= appendToDocument
     putStrln document
