@@ -21,5 +21,6 @@ search (Ret t) = -- return value
 search (Args t t') = -- still argument
 
 main = do
-    document = extractTypeSignature undefiend "typesig" >>= appendToDocument
+    codes = -- read file to get the code using typesig
+    document = extractTypeSignature codes "typesig" >>= appendToDocument
     putStrln document
