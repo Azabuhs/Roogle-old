@@ -1,3 +1,4 @@
+module ExtractTypeSignature where
 import System.Environment
 import Control.Monad.IO.Class
 
@@ -18,7 +19,7 @@ extractTypeSignatureWithSpecifiedPattern ptn str = extractTypeSignature str ptn
 typeSignaturePattern1 :: String
 typeSignaturePattern1 = "typesig"
 
-main = do
-    codes <- liftIO $ readFile "./typesig.rb"
-    doc <- extractTypeSignatures typeSignaturePattern1 codes
-    show doc
+{- main = do -}
+    {- codes <- liftIO $ readFile "./typesig.rb" -}
+    {- doc <- extractTypeSignatures typeSignaturePattern1 codes -}
+    {- show doc -}
