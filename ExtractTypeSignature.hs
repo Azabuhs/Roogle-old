@@ -4,7 +4,6 @@ import Control.Monad.IO.Class
 
 type Document = [String]
 
-{- it needs to return String instead of Maybe String -}
 extractTypeSignature :: String -> String -> Maybe String
 extractTypeSignature ptn str =
     if take (length ptn) str == ptn 
