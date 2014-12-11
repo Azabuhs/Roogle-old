@@ -11,19 +11,17 @@ extractTypeSignature ptn str =
     then Just str
     else Nothing
 
-extractTypeSignature' :: Stirng -> String -> String
-extractTypeSignature' ptn str =
-    if take 
-
-compactMaybe :: [Maybe String] -> [String]
-compactMaybe (Just x:xs) = [x] ++ compactMaybe xs
-compactMaybe (Nothing:xs) = compactMaybe xs
+compactMaybe :: [Maybe a] -> [a]
+compactMaybe [] = []
+compactMaybe (x:xs) = case x of
+  Just v -> [v] ++ compactMaybe xs
+  Nothing -> compactMaybe xs
 
 extractTypeSignatures :: String -> [String] -> [String]
-extractTypeSignatures ptn = compactMaybe $ map $ extractTypeSignatureWithSpecifiedPattern ptn
+extractTypeSignatures ptn strs = compactMaybe (map (\x -> (extractTypeSignature ptn x)) strs)
 
-extractTypeSignatureWithSpecifiedPattern :: String -> String -> Maybe String
-extractTypeSignatureWithSpecifiedPattern = extractTypeSignature
+extractTypeSignatureWithSpecifiedPattern :: String -> (String -> Maybe String)
+extractTypeSignatureWithSpecifiedPattern args = extractTypeSignature args
 
 typeSignaturePattern1 :: String
 typeSignaturePattern1 = "typesig"
