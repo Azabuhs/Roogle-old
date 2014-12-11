@@ -9,7 +9,7 @@ extractTypeSignature str ptn =
     then Just str
     else Nothing
 
-extractTypeSignatures :: String -> IO String -> [Maybe String]
+extractTypeSignatures :: String -> [String] -> [Maybe String]
 extractTypeSignatures ptn = map $ extractTypeSignatureWithSpecifiedPattern ptn
 
 extractTypeSignatureWithSpecifiedPattern :: String -> String -> Maybe String
