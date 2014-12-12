@@ -7,8 +7,20 @@ import Text.Regex
 type Document = [String]
 
 extractTypeSignature :: String -> String -> Maybe String
-extractTypeSignature = typeSignatureMatch
+extractTypeSignature ptn str = case typeSignatureMatch ptn str of
+    Just v -> Just $ toDoc v
+    Nothing  -> Nothing
 
+toDoc :: String -> String
+toDoc str = subRegex (mkRegex "=>")
+          (subRegex (mkRegex ",")
+            (subRegex (mkRegex "\\[")
+              (subRegex (mkRegex "\\]")
+                (subRegex (mkRegex ":") str
+                  " ::") "") "") " ->") "->"
+
+{- replace :: String -> String -> String -> String -}
+{- replace org old new =  -}
 
 typeSignatureMatch :: String -> String -> Maybe String
 typeSignatureMatch ptn str = case matchRegexAll (mkRegex $ ".*" ++ ptn) str of
