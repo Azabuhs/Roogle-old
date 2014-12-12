@@ -7,7 +7,8 @@ import Text.Regex
 type Document = [String]
 
 extractTypeSignature :: String -> String -> Maybe String
-extractTypeSignature ptn str = typeSignatureMatch ptn str
+extractTypeSignature = typeSignatureMatch
+
 
 typeSignatureMatch :: String -> String -> Maybe String
 typeSignatureMatch ptn str = case matchRegexAll (mkRegex $ ".*" ++ ptn) str of
@@ -24,7 +25,7 @@ extractTypeSignatures :: String -> [String] -> [String]
 extractTypeSignatures ptn strs = compactMaybe (map (\x -> (extractTypeSignature ptn x)) strs)
 
 extractTypeSignatureWithSpecifiedPattern :: String -> (String -> Maybe String)
-extractTypeSignatureWithSpecifiedPattern args = extractTypeSignature args
+extractTypeSignatureWithSpecifiedPattern = extractTypeSignature
 
 typeSignaturePattern1 :: String
 typeSignaturePattern1 = "typesig "
