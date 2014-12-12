@@ -27,4 +27,4 @@ extractTypeSignatureWithSpecifiedPattern :: String -> (String -> Maybe String)
 extractTypeSignatureWithSpecifiedPattern args = extractTypeSignature args
 
 typeSignaturePattern1 :: String
-typeSignaturePattern1 = "typesig"
+typeSignaturePattern1 = "typesig "
