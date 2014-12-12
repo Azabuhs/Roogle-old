@@ -1,6 +1,11 @@
 class RubypeTest
-  typesig str8int2: [String, Numeral => String]
-  def str8int2Str(a,b)
+  def str8int2str(a,b)
     "#{a} b"
   end
-end
+  typesig str8int2: [String, Numeral => String]
+
+  def marry(people)
+    # Your Ruby code as usual
+  end
+  typesig marry: [People -> Any]
+end]

@@ -19,9 +19,6 @@ toDoc str = subRegex (mkRegex "=>")
                 (subRegex (mkRegex ":") str
                   " ::") "") "") " ->") "->"
 
-{- replace :: String -> String -> String -> String -}
-{- replace org old new =  -}
-
 typeSignatureMatch :: String -> String -> Maybe String
 typeSignatureMatch ptn str = case matchRegexAll (mkRegex $ ".*" ++ ptn) str of
                        Just (_, _, v, _) -> Just v
