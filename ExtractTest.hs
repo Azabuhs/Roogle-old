@@ -3,9 +3,9 @@ import Test.HUnit
 import System.IO
 import Control.Monad.IO.Class
 
-test1 = assertEqual "typesignature is extracted" (extractTypeSignatures typeSignaturePattern1 $ lines $ liftIO $ readFile "./typesig.rb") ["typesig str8int2: [String, Numeral => String]"]
-
-tests = TestList [TestLabel test1 test1]
+tests = [
+        "typeSignatureMatch" ~: typeSignatureMatch typeSignaturePattern1 "  typesig str8int2str: [String, Numeral => String]" ~=? Just "str8int2str: [String, Numeral => String]"
+        ]
 
 main = do
-    runTestText (putTextToHandle stderr False) tests
+    runTestTT $ TestList tests
