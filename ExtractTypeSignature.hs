@@ -30,10 +30,10 @@ toDoc str = subRegex (mkRegex "=>")
                 (subRegex (mkRegex ":") str
                   " ::") "") "") " ->") "->"
 
-toDoc' :: Scope -> String
-toDoc' (Class klass scopes) = unlines $ map (\x -> (klass ++ toDoc' x)) scopes
-toDoc' (Module mdl scopes) = unlines $ map (\x -> (mdl ++ toDoc' x)) scopes
-toDoc' (Method meth typesig) = "#" ++ meth ++ " :: " ++ typesig
+scopeToDoc :: Scope -> String
+scopeToDoc (Class klass scopes) = unlines $ map (\x -> (klass ++ scopeToDoc x)) scopes
+scopeToDoc (Module mdl scopes) = unlines $ map (\x -> (mdl ++ scopeToDoc x)) scopes
+scopeToDoc (Method meth typesig) = "#" ++ meth ++ " :: " ++ typesig
 
 {- parseCode :: String -> Scope -}
 
