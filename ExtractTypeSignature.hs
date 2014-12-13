@@ -33,7 +33,9 @@ toDoc str = subRegex (mkRegex "=>")
 toDoc' :: Scope -> String
 toDoc' (Class klass scopes) = unlines $ map (\x -> (klass ++ toDoc' x)) scopes
 toDoc' (Module mdl scopes) = unlines $ map (\x -> (mdl ++ toDoc' x)) scopes
-toDoc' (Method meth typesig) = "#" ++ meth ++ " :: " ++ typesig ++ "\n"
+toDoc' (Method meth typesig) = "#" ++ meth ++ " :: " ++ typesig
+
+{- parseCode :: String -> Scope -}
 
 {- buildDoc :: String -> Document -}
 {- buildDoc = foldl appendContext [] $ lines -}
