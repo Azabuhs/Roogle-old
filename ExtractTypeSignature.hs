@@ -37,47 +37,11 @@ scopeToDoc (Class klass scopes) = unlines $ map (\x -> (klass ++ scopeToDoc x)) 
 scopeToDoc (Module mdl scopes) = unlines $ map (\x -> (mdl ++ scopeToDoc x)) scopes
 scopeToDoc (Method meth typesig) = "#" ++ meth ++ " :: " ++ typesig
 
-{- parseCode :: [String] -> Scope -}
-{- parseCode = foldl extendScope EmptyScope -}
-
-{- extendScope :: Scope -> String -> Scope -}
-{- extendScope EmptyScope code = extractScope code -}
-{- extendScope (Class klass [EmptyScope]) code = Class klass $ extractScope code -}
-{- extendScope (Module mdl [EmptyScope]) code = Module mdl $ extractScope code -}
-
-{- extractScope :: String -> Scope -}
-{- extractScope str -}
-  {- | (str =~ "class" :: Bool) == True = case str =~ "class " :: (String, String, String) of -}
-                                         {- (_, _, v) -> Class v [EmptyScope] -}
-  {- | (str =~ "module" :: Bool) == True = case str =~ "moudle " :: (String, String, String) of -}
-    {- (_, _, v) -> Module v [EmptyScope] -}
-  {- | (str =~ "typesig" :: Bool) == True = case str =~ "typesig " :: (String, String, String) of -}
-    {- (_, _, v) -> Method (methName v) (typesigFromCode v) -}
-
-{- methName :: String -}
-{- methName exp = case matchRegexAll (mkRegex " (.*):") exp of -}
-                 {- Just (_, v, _, _) -> v -}
-                 {- Nothing -> "" -}
-
-{- typesigFromCode :: String -}
-{- typesigFromCode exp = case matchRegexAll (mkRegex " (.*):") exp of -}
-                 {- Just (_, _, v, _) -> v -}
-                 {- Nothing -> "" -}
-
-{- appendContext :: Context -> String -> Context -}
-{- appendContext = getContext -}
-
-{- getContext :: String -> Context -}
-{- getContext str -}
-  {- | isJust $ matchRegexAll (mkRegex $ "class") str = case matchRegexAll (mkRegex $ "class") str of -}
-    {- Just (_, _, v, _) -> Class v -}
-
 --
 -- EmptyScope
--- Class className []
--- Class className [Method name typesig, Method name typesig]
+-- Class className [EmptyScope]
+-- Class className [Method name typesig, Method name typesig ...]
 --
-
 toScopeList :: a -> [a]
 toScopeList = replicate 1
 
@@ -88,15 +52,15 @@ accum :: Scope -> String -> Scope
 accum EmptyScope str = mkScope str
 accum (Class x [EmptyScope]) str = Class x $ toScopeList $ accum EmptyScope str
 accum (Module x [EmptyScope]) str = Class x $ toScopeList $ accum EmptyScope str
-accum (Class x s) str = Class x (s ++ $ toScopeList $ accum EmptyScope str)
-accum (Module x s) str = Module x $ s ++ toScopeList $ accum EmptyScope str
+accum (Class x s) str = Class x (s ++ (toScopeList $ accum EmptyScope str))
+accum (Module x s) str = Module x (s ++ (toScopeList $ accum EmptyScope str))
 
 encounterClass :: String -> Bool
-encounterClass = True
+encounterClass str = True
 encounterModule :: String -> Bool
-encounterModule = True
+encounterModule str = True
 encounterMethod :: String -> Bool
-encounterMethod = True
+encounterMethod str = True
 
 mkScope :: String -> Scope
 mkScope str
@@ -114,13 +78,13 @@ mkMethodScope :: String -> Scope
 mkMethodScope str = Method (getMethodName str) (methodTypesignature str)
 
 getClassName :: String -> String
-getClassName = "test"
+getClassName str = "test"
 getModuleName :: String -> String
-getModuleName = "test"
+getModuleName str = "test"
 getMethodName :: String -> String
-getMethodName = "test"
+getMethodName str = "test"
 methodTypesignature :: String -> String
-methodTypesignature = "testsig"
+methodTypesignature str = "testsig"
 --
 --
 
