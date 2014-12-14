@@ -11,7 +11,7 @@ type TypeSignature = String
 data Scope = EmptyScope
             | Class String [Scope]
             | Module String [Scope]
-            | Method String TypeSignature deriving (Show)
+            | Method String TypeSignature deriving (Show, Eq)
 type Wait = String
 -- head contexts is the current Context
 -- as encounter Wait, tail contexts
@@ -67,6 +67,7 @@ mkScope str
   | encounterClass str = mkClassScope str
   | encounterModule str = mkModuleScope str
   | encounterMethod str = mkMethodScope str
+  | otherwise = EmptyScope
 
 mkClassScope :: String -> Scope
 mkClassScope str = Class (getClassName str) [EmptyScope]
@@ -85,8 +86,6 @@ getMethodName :: String -> String
 getMethodName str = "test"
 methodTypesignature :: String -> String
 methodTypesignature str = "testsig"
---
---
 
 typeSignatureMatch :: String -> String -> Maybe String
 typeSignatureMatch ptn str = case matchRegexAll (mkRegex ptn) str of
