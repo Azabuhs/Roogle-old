@@ -42,8 +42,8 @@ scopeToDoc (Method meth typesig) = "#" ++ meth ++ " :: " ++ typesig
 -- Class className [EmptyScope]
 -- Class className [Method name typesig, Method name typesig ...]
 --
-toScopeList :: a -> [a]
-toScopeList = replicate 1
+toScopeList :: Scope -> [Scope]
+toScopeList s = filter (\x -> x /= EmptyScope) $ replicate 1 s
 
 walk :: [String] -> Scope
 walk = foldl accum EmptyScope
@@ -56,17 +56,18 @@ accum (Class x s) str = Class x (s ++ (toScopeList $ accum EmptyScope str))
 accum (Module x s) str = Module x (s ++ (toScopeList $ accum EmptyScope str))
 
 encounterClass :: String -> Bool
-encounterClass str = True
+encounterClass str = str =~ "class" :: Bool
 encounterModule :: String -> Bool
-encounterModule str = True
+encounterModule str = str =~ "module" :: Bool
 encounterMethod :: String -> Bool
-encounterMethod str = True
+encounterMethod str = str =~ "typesig" :: Bool
 
 mkScope :: String -> Scope
 mkScope str
   | encounterClass str = mkClassScope str
   | encounterModule str = mkModuleScope str
   | encounterMethod str = mkMethodScope str
+  -- any line with no class, module and typesig
   | otherwise = EmptyScope
 
 mkClassScope :: String -> Scope
@@ -76,16 +77,20 @@ mkModuleScope :: String -> Scope
 mkModuleScope str = Module (getModuleName str) [EmptyScope]
 
 mkMethodScope :: String -> Scope
-mkMethodScope str = Method (getMethodName str) (methodTypesignature str)
+mkMethodScope str = Method (getMethodName str) (getMethodTypesignature str)
 
 getClassName :: String -> String
-getClassName str = "test"
+getClassName str = case str =~ "class " :: (String, String, String) of
+                     (_, _, klass) -> klass
 getModuleName :: String -> String
-getModuleName str = "test"
+getModuleName str = case str =~ "module " :: (String, String, String) of
+  (_, _, mdl) -> mdl
 getMethodName :: String -> String
-getMethodName str = "test"
-methodTypesignature :: String -> String
-methodTypesignature str = "testsig"
+getMethodName str = case str =~ "(?<==)(.*)(?=:)" :: (String, String, String) of
+  (_, name, _) -> name
+getMethodTypesignature :: String -> String
+getMethodTypesignature str = case str =~ ": " :: (String, String, String) of
+  (_, _, sig) -> toDoc sig
 
 typeSignatureMatch :: String -> String -> Maybe String
 typeSignatureMatch ptn str = case matchRegexAll (mkRegex ptn) str of
